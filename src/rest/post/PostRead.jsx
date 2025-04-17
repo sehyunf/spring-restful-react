@@ -25,8 +25,12 @@ const PostRead = () => {
       <h1>내용 : {post.postContent}</h1>
       <h1>게시자 : {post.memberName}</h1>
       <h1>조회수 : {post.postReadCount}</h1>
-      <Link to={`/update/${post.id}`}>수정</Link>
-      <Link to={`/delete/${post.id}`}>삭제</Link>
+      <div>
+        <Link to={`/update/${post.id}`}>수정</Link>
+      </div>
+      <div>
+        <Link to={`/delete/${post.id}`}>삭제</Link>
+      </div>
     </div>
   );
 };

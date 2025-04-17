@@ -16,10 +16,11 @@ const LoginContainer = () => {
         },
         body : JSON.stringify(data)
       }).then((res) => {
-        console.log(res);
+        console.log(res.body);
       })
 
     })}>
+      <h1>로그인</h1>
       
       <label>
         <p>이메일</p>
@@ -40,8 +41,9 @@ const LoginContainer = () => {
           })}
         />
       </label>
-
-      <button disabled={isSubmitting}>로그인</button>
+      <div>
+        <button disabled={isSubmitting}>로그인</button>
+      </div>
     </form>
   );
 };
