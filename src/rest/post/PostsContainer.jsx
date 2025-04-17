@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PostsContainer = () => {
 
@@ -8,15 +9,19 @@ const PostsContainer = () => {
     const getPosts = async () => {
       const response = await fetch("http://localhost:10000/posts/api/posts");
       const posts = await response.json();
+      console.log(posts);
+      
       return posts;
     }
 
     getPosts().then(setPosts,console.log).catch(console.error);
   }, [])
 
-  const postLists = posts.map(({postTitle, postContent}, i) => (
-    <li key={i}>
-      {postTitle}
+  const postLists = posts.map(({id, postTitle, postContent}, i) => (
+    <li>
+      <Link to={`/read/${id}`}>
+        {postTitle}
+      </Link>
     </li>
   ))
 

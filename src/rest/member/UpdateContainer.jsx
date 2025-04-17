@@ -1,62 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-// react-hook-form
 const UpdateContainer = () => {
 
-  const [member, setMember] = useState({});
+  // 회원 정보
+  const id = 84;
+  const [member, setMember] = useState({})
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const memberId = 49;
-
-  useEffect(() => {
-    const getMember = async () => {
-      const response = await fetch(`http://localhost:10000/members/api/member/${memberId}`, {
-        method : 'GET'
-      });      
-      const member = await response.json();      
-      console.log(member);
-      return member;
-    }
-
-    getMember().then(setMember).catch(console.error);
-  }, [])
-
-  const {register, handleSubmit, getValues, formState: { isSubmitting, isSubmitted, errors }} = useForm({mode:"onChange"})
+  // useForm
+  const {register, handleSubmit, getValues, reset, formState: { isSubmitting, isSubmitted, errors }} = useForm({mode:"onChange"})
   // 이메일 형식을 맞춘 정규식
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // 소문자, 특수문자, 숫자를 포함한 8자리 이상의 정규식
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[!@#])[\da-zA-Z!@#]{8,}$/;
 
+  useEffect(() => {
+    const getMember = async () => {
+      const response = await fetch(`http://localhost:10000/members/api/member/${id}`, {
+        method : "GET",
+      })
+      const user = response.json()
+      return user
+    }
+
+    getMember().then((member) => {
+      const {memberEmail, memberName} = member;
+      // // 초기값
+      reset({
+        memberEmail,
+        memberName
+      })
+      setMember(member)
+    }).catch(console.error)
+
+  }, [isUpdate])
+
   return (
     <form onSubmit={handleSubmit(async (data) => {
-
       
-      console.log(data)
-      const {hobbies, passwordConfirm, ...memberVO} = data;
-      // const {memberEmail, memberName, memberPassword } = data;
-      // const memberVO = {
-      //   memberEmail,
-      //   memberName,
-      //   memberPassword
-      // }
-      console.log(memberVO)
+      const {passwordConfirm, ...others} = data;
+      const memberVO = {id, ...others}
 
-      fetch(`http://localhost:10000/members/api/update/${member.id}`, {
+      await fetch("http://localhost:10000/members/api/modify", {
         method : "PUT",
         headers : {
           "Content-Type" : "application/json"
         },
         body : JSON.stringify(memberVO)
-      })
-
+      }).then((res) => {
+        if(!res.ok) throw new Error(`member modify response 에러`)
+        setIsUpdate(!isUpdate)
+      }).catch(console.error)
 
     })}>
-      <input type='hidden' value={member.id}></input>
       
       <label>
         <p>이메일</p>
         <input 
-          type="text" placeholder={member.memberEmail}
+          type="text" placeholder='이메일 입력하세요'
           {...register("memberEmail", {
             required : true,
             pattern : {
@@ -114,7 +116,7 @@ const UpdateContainer = () => {
       <label>
         <p>이름</p>
         <input 
-          type="text" placeholder={member.memberName}
+          type="text" placeholder="비밀번호를 입력하세요."
           {...register("memberName", {
             required : true,
           })}
@@ -124,18 +126,7 @@ const UpdateContainer = () => {
         )}
       </label>
 
-      {/* 체크박스 */}
-      {/* <p>취미</p>
-      <label>
-        <span>축구</span><input name="hobby" type="checkbox" {...register("hobbies")}/>
-      </label>
-      <label>
-        <span>야구</span><input name="hobby" type="checkbox" {...register("hobbies")}/>
-      </label> */}
-
-      <button disabled={isSubmitting} onClick={() => {
-        alert("수정완료")
-      }}>수정하기</button>
+      <button disabled={isSubmitting}>정보 수정</button>
     </form>
   );
 };
