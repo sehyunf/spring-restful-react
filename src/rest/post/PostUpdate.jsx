@@ -49,7 +49,7 @@ const PostUpdate = () => {
         setIsUpdate(!isUpdate)
         } else {
           alert("업데이트 완료!")
-          window.location.href = `/read/${id}`
+          window.location.href = `/post/read/${id}`
         }
       }).catch(console.error)
 

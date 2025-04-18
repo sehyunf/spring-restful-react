@@ -5,47 +5,76 @@ import PostsContainer from '../rest/post/PostsContainer';
 import PostRead from '../rest/post/PostRead';
 import PostUpdate from '../rest/post/PostUpdate';
 import PostDelete from '../rest/post/PostDelete';
-import LoginContainer from '../rest/member/LoginContainer';
+import LoginContainerSolution from '../rest/member/LoginContainerSolution';
+import UpdateContainer from '../rest/member/UpdateContainer';
+import DeleteContainer from '../rest/member/DeleteContainer';
+import JoinContainer from '../rest/member/JoinContainer';
+import Mypage from '../rest/mypage/Mypage';
+import PostLayout from '../rest/post/PostLayout';
 
 const router = createBrowserRouter([
   {
-    path : "/",
-    element : <PostsContainer />
-  },
-  {
-    path : "/read",
-    element : <PostRead />,
+    path : "/post",
+    element : <PostLayout />,
     children : [
       {
-        path : ":id",
+        index : true,
+        element : <PostsContainer />
+      },
+      {
+        path : "read",
         element : <PostRead />,
-      }
-    ]
-  },
-  {
-    path : "/update",
-    element : <PostUpdate />,
-    children : [
+        children : [
+          {
+            path : ":id",
+            element : <PostRead />,
+          }
+        ]
+      },
       {
-        path : ":id",
+        path : "update",
         element : <PostUpdate />,
-      }
-    ]
-  },
-  {
-    path : "/delete",
-    element : <PostDelete />,
-    children : [
+        children : [
+          {
+            path : ":id",
+            element : <PostUpdate />,
+          }
+        ]
+      },
       {
-        path : ":id",
+        path : "delete",
         element : <PostDelete />,
+        children : [
+          {
+            path : ":id",
+            element : <PostDelete />,
+          }
+        ]
       }
     ]
   },
+  ,
   {
-    path : "/login",
-    element : <LoginContainer />,
+    path : "member/login",
+    element : <LoginContainerSolution />,
+  },
+  {
+    path : "member/join",
+    element : <JoinContainer />,
+  },
+  {
+    path : "member/update",
+    element : <UpdateContainer />,
+  },
+  {
+    path : "member/delete",
+    element : <DeleteContainer />,
+  },
+  {
+    path : "/mypage",
+    element : <Mypage />,
   }
+
 ])
 
 export default router;

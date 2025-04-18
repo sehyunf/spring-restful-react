@@ -1,3 +1,10 @@
+import { combineReducers } from "redux";
+import user from "./user";
+import post from "./post";
 
-const SET_USER = "user/SET_USER";
-const SET_USER_STATUS = "user/SET_USER_STATUS"
+const rootReducer = combineReducers({
+  user,
+  post
+})
+
+export default rootReducer;
